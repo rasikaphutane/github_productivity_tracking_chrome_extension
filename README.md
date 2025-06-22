@@ -49,7 +49,7 @@ cd github_productivity_tracking_chrome_extension
 ⚙️ Backend (FastAPI Sentiment Server)
 Required for mood/sentiment analysis
 
-****To Run Locally:
+**To Run Locally**
 1. Install dependencies:
 pip install -r requirements.txt
 
@@ -57,7 +57,7 @@ pip install -r requirements.txt
 uvicorn main:app --reload --port 8080
 Please make sure this is running at http://localhost:8080/sentiment when using the extension.
 
-🧪 Sample Commit Message Sentiment
+**🧪 Sample Commit Message Sentiment**
 Your commit messages are sent to the backend like:
 
 POST /sentiment
@@ -70,7 +70,7 @@ The response might be:
 }
 Which gets mapped to: 😐 🔥 🔥
 
-🎯 Productivity & Streak Goals
+**🎯 Productivity & Streak Goals**
 Set your streak goal (3–365 days) from the extension UI
 
 Set your daily time goal (30 min – 6 hours)
@@ -79,7 +79,8 @@ Receive pop-up alerts when you're close or done
 
 Track progress live with a score, mood emojis, and time metrics
 
-📦 Optional Future Features(yet to be added :) )
+**📦 Optional Future Features(yet to be added :) )**
+
  CSV Export Button
 
  Chart.js Line Charts
