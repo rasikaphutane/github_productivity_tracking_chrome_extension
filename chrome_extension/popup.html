@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DevPulse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    body {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 1.2rem;
+      width: 320px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+    }
+
+    /* Minimal starfield background */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(1px 1px at 80px 60px, rgba(88, 166, 255, 0.3), transparent 50%),
+        radial-gradient(1px 1px at 200px 100px, rgba(255, 255, 255, 0.2), transparent 50%),
+        radial-gradient(1px 1px at 150px 40px, rgba(88, 166, 255, 0.2), transparent 50%),
+        radial-gradient(1px 1px at 50px 160px, rgba(255, 255, 255, 0.1), transparent 50%),
+        radial-gradient(1px 1px at 280px 80px, rgba(88, 166, 255, 0.2), transparent 50%);
+      background-repeat: no-repeat;
+      animation: stars-drift 20s linear infinite;
+      z-index: -3;
+    }
+
+    /* Subtle space dust */
+    body::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(ellipse 180px 40px at 120px 80px, rgba(88, 166, 255, 0.03), transparent 60%),
+        radial-gradient(ellipse 120px 30px at 220px 140px, rgba(255, 255, 255, 0.02), transparent 60%);
+      animation: galaxy-drift 25s ease-in-out infinite;
+      z-index: -2;
+    }
+
+    @keyframes stars-drift {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-5px); }
+    }
+
+    @keyframes galaxy-drift {
+      0%, 100% { 
+        transform: translateX(0px);
+        opacity: 0.2;
+      }
+      50% { 
+        transform: translateX(3px);
+        opacity: 0.4;
+      }
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      position: relative;
+      z-index: 1;
+      
+      /* Clean GitHub-style container */
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      
+      /* Minimal gradient background */
+      background: 
+        linear-gradient(135deg, 
+          rgba(22, 27, 34, 0.8) 0%,
+          rgba(13, 17, 23, 0.9) 100%);
+      
+      /* Subtle shadow */
+      box-shadow: 
+        0 0 20px rgba(0, 0, 0, 0.3),
+        0 4px 16px rgba(0, 0, 0, 0.2);
+      
+      /* Gentle float animation */
+      animation: gentle-float 12s ease-in-out infinite;
+    }
+
+    /* Minimal border accent */
+    main::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      right: -1px;
+      bottom: -1px;
+      border-radius: 12px;
+      background: linear-gradient(45deg, 
+        transparent,
+        rgba(88, 166, 255, 0.1),
+        transparent);
+      background-size: 300% 300%;
+      animation: border-flow 15s linear infinite;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Clean keyframe animations */
+    @keyframes gentle-float {
+      0%, 100% { 
+        transform: translateY(0px);
+      }
+      50% { 
+        transform: translateY(-1px);
+      }
+    }
+
+    @keyframes border-flow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Hover effects */
+    main:hover {
+      border-color: #58a6ff;
+      transform: translateY(-2px);
+      transition: all 0.3s ease;
+    }
+
+    main:hover::before {
+      opacity: 1;
+    }
+
+    /* Focus state */
+    main:focus-within {
+      border-color: #58a6ff;
+      box-shadow: 
+        0 0 20px rgba(88, 166, 255, 0.1),
+        0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .fade-in {
+      animation: fade-in 0.5s ease-out;
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    input[type="text"] {
+      background: #161b22;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: #58a6ff;
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #7d8590;
+      font-style: normal;
+    }
+
+    button {
+      background: #21262d;
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      background: #30363d;
+      border-color: #58a6ff;
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    button.secondary {
+      background: transparent;
+      color: #7d8590;
+      border: 1px solid #21262d;
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+      margin-top: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button.secondary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(88, 166, 255, 0.1), 
+        transparent);
+      transition: left 0.5s ease;
+    }
+
+    button.secondary:hover {
+      background: #21262d;
+      color: #c9d1d9;
+      border-color: #30363d;
+      transform: translateY(-1px);
+    }
+
+    button.secondary:hover::before {
+      left: 100%;
+    }
+
+    button.secondary.danger {
+      color: #f85149;
+      border-color: rgba(248, 81, 73, 0.2);
+    }
+
+    button.secondary.danger::before {
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(248, 81, 73, 0.1), 
+        transparent);
+    }
+
+    button.secondary.danger:hover {
+      background: rgba(248, 81, 73, 0.1);
+      color: #ff6b6b;
+      border-color: rgba(248, 81, 73, 0.3);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+
+    .button-group button {
+      flex: 1;
+      margin-top: 0;
+    }
+
+    #history-output {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(22, 27, 34, 0.5);
+      border: 1px solid #21262d;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      max-height: 200px;
+      overflow-y: auto;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+
+    #history-output.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #history-output:empty {
+      display: none;
+    }
+
+    #result {
+      background: #0d1117;
+      border: 1px solid #21262d;
+      padding: 1.5rem;
+      border-radius: 8px;
+      min-height: 80px;
+      font-size: 0.95rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #result::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(88, 166, 255, 0.2), 
+        transparent);
+      animation: scan 12s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { transform: translateX(-100%); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateX(100%); opacity: 0; }
+    }
+
+    h1 {
+      text-align: center;
+      background: linear-gradient(135deg, 
+        #c9d1d9 0%,
+        #58a6ff 50%,
+        #c9d1d9 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 1.8rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      animation: text-shimmer 8s ease-in-out infinite;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.025em;
+    }
+
+    @keyframes text-shimmer {
+      0%, 100% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    /* Enhanced Settings Panel */
+    #settings-panel {
+      margin-top: 1.5rem;
+      border: 1px solid #21262d;
+      border-radius: 12px;
+      background: 
+        linear-gradient(135deg, 
+          rgba(22, 27, 34, 0.9) 0%,
+          rgba(13, 17, 23, 0.95) 100%);
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+      animation: settings-expand 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    /* Terminal-style header */
+    .settings-header {
+      background: 
+        linear-gradient(90deg, 
+          rgba(33, 38, 45, 0.8) 0%,
+          rgba(22, 27, 34, 0.9) 100%);
+      border-bottom: 1px solid #30363d;
+      padding: 1rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .settings-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, 
+        transparent,
+        rgba(88, 166, 255, 0.3),
+        transparent);
+      animation: header-scan 8s linear infinite;
+    }
+
+    @keyframes header-scan {
+      0% { transform: translateX(-100%); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateX(100%); opacity: 0; }
+    }
+
+    .settings-title {
+      color: #c9d1d9;
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .settings-title::before {
+      content: '>';
+      color: #58a6ff;
+      font-weight: 500;
+      animation: cursor-blink 2s infinite;
+    }
+
+    @keyframes cursor-blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0.3; }
+    }
+
+    .settings-subtitle {
+      color: #7d8590;
+      font-size: 0.75rem;
+      margin: 0.25rem 0 0 1.5rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+    }
+
+    /* Settings body */
+    .settings-body {
+      padding: 1.5rem;
+      background: rgba(13, 17, 23, 0.3);
+    }
+
+    @keyframes settings-expand {
+      from {
+        opacity: 0;
+        transform: translateY(-15px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Enhanced form elements */
+    .setting-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .setting-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .setting-label {
+      color: #f0f6fc;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .setting-label::before {
+      content: '//';
+      color: #7d8590;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+    }
+
+    .setting-description {
+      color: #7d8590;
+      font-size: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.4;
+    }
+
+    #settings-panel select {
+      background: 
+        linear-gradient(135deg, 
+          rgba(22, 27, 34, 0.8) 0%,
+          rgba(13, 17, 23, 0.9) 100%);
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      width: 100%;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      appearance: none;
+      background-image: 
+        linear-gradient(45deg, transparent 50%, #7d8590 50%),
+        linear-gradient(135deg, #7d8590 50%, transparent 50%);
+      background-position: 
+        calc(100% - 12px) calc(1em - 2px),
+        calc(100% - 8px) calc(1em - 2px);
+      background-size: 4px 4px, 4px 4px;
+      background-repeat: no-repeat;
+      cursor: pointer;
+    }
+
+    #settings-panel select:focus {
+      border-color: #58a6ff;
+      box-shadow: 
+        0 0 0 3px rgba(88, 166, 255, 0.1),
+        0 2px 8px rgba(88, 166, 255, 0.05);
+      outline: none;
+      background-image: 
+        linear-gradient(45deg, transparent 50%, #58a6ff 50%),
+        linear-gradient(135deg, #58a6ff 50%, transparent 50%);
+    }
+
+    #settings-panel select:hover {
+      border-color: #58a6ff;
+      background: 
+        linear-gradient(135deg, 
+          rgba(22, 27, 34, 0.9) 0%,
+          rgba(13, 17, 23, 0.95) 100%);
+    }
+
+    #settings-panel select option {
+      background: #161b22;
+      color: #c9d1d9;
+      padding: 0.5rem;
+    }
+
+    /* Enhanced save button */
+    #save-settings {
+      background: 
+        linear-gradient(135deg, 
+          #238636 0%,
+          #2ea043 100%);
+      color: white;
+      border: 1px solid #2ea043;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.875rem 1.25rem;
+      margin-top: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 
+        0 2px 4px rgba(35, 134, 54, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    #save-settings::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+      transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #save-settings::after {
+      content: 'git commit -m "update settings"';
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.625rem;
+      color: rgba(255, 255, 255, 0.6);
+      opacity: 0;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    #save-settings:hover {
+      background: 
+        linear-gradient(135deg, 
+          #2ea043 0%,
+          #46954a 100%);
+      border-color: #46954a;
+      transform: translateY(-2px);
+      box-shadow: 
+        0 4px 12px rgba(35, 134, 54, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    #save-settings:hover::before {
+      left: 100%;
+    }
+
+    #save-settings:hover::after {
+      opacity: 1;
+      bottom: -16px;
+    }
+
+    #save-settings:active {
+      transform: translateY(-1px);
+      box-shadow: 
+        0 2px 6px rgba(35, 134, 54, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    /* Status indicator */
+    #settings-status {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      background: rgba(22, 27, 34, 0.5);
+      border: 1px solid #21262d;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #settings-status.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #settings-status.success {
+      color: #3fb950;
+      border-color: rgba(63, 185, 80, 0.2);
+      background: rgba(63, 185, 80, 0.05);
+    }
+
+    #settings-status.error {
+      color: #f85149;
+      border-color: rgba(248, 81, 73, 0.2);
+      background: rgba(248, 81, 73, 0.05);
+    }
+
+    #settings-status::before {
+      content: '$ ';
+      color: #7d8590;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #30363d;
+      border-radius: 2px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #58a6ff;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 360px) {
+      body {
+        padding: 0.8rem;
+        width: 280px;
+      }
+      
+      main {
+        padding: 1.5rem;
+      }
+      
+      .settings-body {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>DevPulse</h1>
+    <input id="github-username" type="text" placeholder="GitHub username" />
+    <button id="analyze-btn">Analyze</button>
+    <button id="show-history" class="secondary">View History</button>
+    <button id="clear-history" class="secondary danger">Clear History</button>
+    <div id="result" class="fade-in">Your results will appear here.
+      <!-- History Section (Hidden by default) -->
+      <div id="history-output" class="fade-in"></div>
+    </div>
+    
+    <!-- Enhanced Settings Panel -->
+    <section id="settings-panel">
+      <div class="settings-header">
+        <h2 class="settings-title">configure</h2>
+        <p class="settings-subtitle">Optimize your development workflow</p>
+      </div>
+      <div class="settings-body">
+        <div class="setting-group">
+          <label class="setting-label" for="streak-target">Commit Streak Target</label>
+          <p class="setting-description">Set your daily coding consistency goal</p>
+          <select id="streak-target">
+            <option value="3">3 days</option>
+            <option value="5">5 days</option>
+            <option value="7" selected>7 days</option>
+            <option value="15">15 days</option>
+            <option value="30">30 days</option>
+          </select>
+        </div>
+        
+        <div class="setting-group">
+          <label class="setting-label" for="daily-minutes">Daily Code Time</label>
+          <p class="setting-description">Your target coding duration per day</p>
+          <select id="daily-minutes">
+            <option value="30">30 minutes</option>
+            <option value="60" selected>1 hour</option>
+            <option value="120">2 hours</option>
+          </select>
+        </div>
+        
+        <button id="save-settings">Deploy Changes</button>
+        <div id="settings-status"></div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- External Scripts -->
+  <script src="popup.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>
